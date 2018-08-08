@@ -23,7 +23,7 @@ def parse_file(path, filename):
     sheets = workbook.sheetnames
     
     for sheet in sheets:
-        print('Work with sheet ['sheet + ']')
+        print('Work with sheet [' + sheet + ']')
         
         #Activate sheet
         worksheet = workbook[sheet]
@@ -46,5 +46,5 @@ def parse_file(path, filename):
                              ])
 
 print('Script is started')
-parse_file('', 'test.xlsx')
+parse_file('', 'test.xlsx') # CHANGE FILENAME HERE. FILE MUST TO BE IN THE SAME FOLDER
 print('sreipt is ended')
