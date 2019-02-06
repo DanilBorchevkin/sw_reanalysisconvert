@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Aug  8 22:26:15 2018
-
 @author: Danil Borchevkin
-
-Dimension of the data 
-1-42 by lat (rows)
-1-50 by long (columns)
 
 """
 
@@ -65,13 +59,13 @@ def parse__reanalysis_file(path, filename, start_lat, end_lat, start_long, end_l
         for long_i in desired_longs_index:
             for lat_i in desired_lats_index:
                 output_list.append([
-                    LAT_LIST[lat_i],                                               #lat
                     LONG_LIST[long_i],                                             #long
+                    LAT_LIST[lat_i],                                               #lat
                     worksheet.cell(row=lat_i+SHIFT, column=long_i+SHIFT).value     #value
                 ])
 
         # 3. Write values to CSV
-        with open('./' + filename + '_' + sheet + '.csv', 'w', newline='') as f:
+        with open('./' + filename + '_' + sheet + '.txt', 'w', newline='') as f:
             writer = csv.writer(f, delimiter='\t')
             for line in output_list:
                 writer.writerow(line)
