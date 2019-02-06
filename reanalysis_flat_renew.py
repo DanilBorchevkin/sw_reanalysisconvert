@@ -55,13 +55,23 @@ def parse__reanalysis_file(path, filename, start_lat, end_lat, start_long, end_l
         desired_longs_index = get_indicies_of_values(LONG_LIST, start_long, end_long)
         
         # 2. Create output list
-        output_list = [] 
-        for long_i in desired_longs_index:
-            for lat_i in desired_lats_index:
+        # ws.cell method very very slow. 
+        # sheet[ row ][ col ].value slow too. 
+        # so we should use iter_rows 
+        # iter_columns not available for ReadOnly workbooks
+        output_list = []
+
+        for lat_i,row in enumerate(worksheet.iter_rows(
+                                        min_row=desired_lats_index[0]+SHIFT,
+                                        max_row=desired_lats_index[-1]+SHIFT,
+                                        min_col=desired_longs_index[0]+SHIFT,
+                                        max_col=desired_longs_index[-1]+SHIFT,
+                                        values_only=True)):
+            for long_i,value in enumerate(row):
                 output_list.append([
-                    LONG_LIST[long_i],                                             #long
-                    LAT_LIST[lat_i],                                               #lat
-                    worksheet.cell(row=lat_i+SHIFT, column=long_i+SHIFT).value     #value
+                    LONG_LIST[long_i],  #long
+                    LAT_LIST[lat_i],    #lat
+                    value               #value
                 ])
 
         # 3. Write values to CSV
