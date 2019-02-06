@@ -60,16 +60,21 @@ def parse__reanalysis_file(path, filename, start_lat, end_lat, start_long, end_l
         desired_lats_index = get_indicies_of_values(LAT_LIST, end_lat, start_lat)
         desired_longs_index = get_indicies_of_values(LONG_LIST, start_long, end_long)
         
-        # 2. Write values to CSV
+        # 2. Create output list
+        output_list = [] 
+        for long_i in desired_longs_index:
+            for lat_i in desired_lats_index:
+                output_list.append([
+                    LAT_LIST[lat_i],                                               #lat
+                    LONG_LIST[long_i],                                             #long
+                    worksheet.cell(row=lat_i+SHIFT, column=long_i+SHIFT).value     #value
+                ])
+
+        # 3. Write values to CSV
         with open('./' + filename + '_' + sheet + '.csv', 'w', newline='') as f:
             writer = csv.writer(f, delimiter='\t')
-            for long_i in desired_longs_index:
-                for lat_i in desired_lats_index:
-                    writer.writerow(
-                            [LAT_LIST[lat_i],                                               #lat
-                             LONG_LIST[long_i],                                             #long
-                             worksheet.cell(row=lat_i+SHIFT, column=long_i+SHIFT).value     #value
-                             ])
+            for line in output_list:
+                writer.writerow(line)
 
 if __name__ == "__main__":
     print('Script is started')
