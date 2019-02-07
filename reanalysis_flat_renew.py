@@ -60,17 +60,23 @@ def parse__reanalysis_file(path, filename, start_lat, end_lat, start_long, end_l
         # so we should use iter_rows 
         # iter_columns not available for ReadOnly workbooks
         output_list = []
+        
+        # Create 'borders' of desired range
+        min_row = desired_lats_index[0]+SHIFT
+        max_row = desired_lats_index[-1]+SHIFT
+        min_col = desired_longs_index[0]+SHIFT
+        max_col = desired_longs_index[-1]+SHIFT
 
         for lat_i,row in enumerate(worksheet.iter_rows(
-                                        min_row=desired_lats_index[0]+SHIFT,
-                                        max_row=desired_lats_index[-1]+SHIFT,
-                                        min_col=desired_longs_index[0]+SHIFT,
-                                        max_col=desired_longs_index[-1]+SHIFT,
+                                        min_row=min_row,
+                                        max_row=max_row,
+                                        min_col=min_col,
+                                        max_col=max_col,
                                         values_only=True)):
             for long_i,value in enumerate(row):
                 output_list.append([
-                    LONG_LIST[long_i],  #long
-                    LAT_LIST[lat_i],    #lat
+                    LONG_LIST[long_i+min_col-SHIFT],  #long
+                    LAT_LIST[lat_i+min_row-SHIFT],    #lat
                     value               #value
                 ])
 
@@ -86,11 +92,11 @@ if __name__ == "__main__":
     # 1. Change start and end values here
     # WARNING! Please see source file
     # - lats starts from 90 and ends by -90
-    # - longs starts from -180 and ends by -179.375
-    START_LAT = 90
-    END_LAT = 85
-    START_LONG = -180
-    END_LONG = -170
+    # - longs starts from -180 and ends by 179.375
+    START_LAT = 70
+    END_LAT = 0
+    START_LONG = -20
+    END_LONG = 40
 
     # 2. CHANGE FILENAME HERE. FILE MUST TO BE IN THE SAME FOLDER
     parse__reanalysis_file('./', 'test_renew.xlsx', START_LAT, END_LAT, START_LONG, END_LONG) 
