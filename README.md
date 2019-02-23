@@ -10,7 +10,7 @@ See LICENCE file
 
 * Python 3.x
 
-* openpyxl
+* openpyxl ^2.6
 
 ## What included
 
