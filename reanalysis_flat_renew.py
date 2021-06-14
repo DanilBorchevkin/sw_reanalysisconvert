@@ -24,11 +24,6 @@ def drange_down(start, stop, step):
         r += step
     return ret
 
-# Because reading of lats and longs very high load task we define it
-LAT_LIST = drange_down(90, -90, -0.5)
-LONG_LIST = drange_up(-180, 179.375, 0.625)
-SHIFT = 2
-
 def get_indicies_of_values(list_of_values, start_value, end_value, shift=0):
     indicies_list = []
 
@@ -39,9 +34,13 @@ def get_indicies_of_values(list_of_values, start_value, end_value, shift=0):
     return indicies_list
 
 def parse__reanalysis_file(path, filename, start_lat, end_lat, start_long, end_long):
+    # Because reading of lats and longs very high load task we define it
+    LAT_LIST = drange_down(65, 35, 0.25)
+    LONG_LIST = drange_up(0, 40, 0.25)
+    SHIFT = 2
+
     # TODO change workdir
     workbook = load_workbook(filename=path+filename, read_only=True)
-    
     sheets = workbook.sheetnames
     
     for sheet in sheets:
@@ -81,7 +80,7 @@ def parse__reanalysis_file(path, filename, start_lat, end_lat, start_long, end_l
                 ])
 
         # 3. Write values to CSV
-        with open('./' + filename + '_' + sheet + '.txt', 'w', newline='') as f:
+        with open('./output/' + filename + '_' + sheet + '.txt', 'w', newline='') as f:
             writer = csv.writer(f, delimiter='\t')
             for line in output_list:
                 writer.writerow(line)
@@ -93,13 +92,13 @@ if __name__ == "__main__":
     # WARNING! Please see source file
     # - lats starts from 90 and ends by -90
     # - longs starts from -180 and ends by 179.375
-    START_LAT = 70
-    END_LAT = 0
-    START_LONG = -20
+    START_LAT = 65
+    END_LAT = 35
+    START_LONG = 0
     END_LONG = 40
 
     # 2. CHANGE FILENAME HERE. FILE MUST TO BE IN THE SAME FOLDER
-    parse__reanalysis_file('./', 'test_renew.xlsx', START_LAT, END_LAT, START_LONG, END_LONG) 
+    parse__reanalysis_file('./input/', 'V wind 975 hPa march 2020.xlsx', START_LAT, END_LAT, START_LONG, END_LONG) 
 
     # 3. Enjoy your files in the same directory =))
 
